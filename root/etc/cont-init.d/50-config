@@ -374,6 +374,14 @@ fi
     touch /config/log/nginx/access.log
 [[ ! -f /config/log/nginx/unauthorized.log ]] && \
     touch /config/log/nginx/unauthorized.log
+[[ ! -f /config/log/nginx/naxsi.log ]] && \
+    touch /config/log/nginx/naxsi.log
+[[ ! -f /config/log/nginx/nginx-noscript.log ]] && \
+    touch /config/log/nginx/nginx-noscript.log
+[[ ! -f /config/log/nginx/nginx-auth.log ]] && \
+    touch /config/log/nginx/nginx-auth.log
+[[ ! -f /config/log/nginx/sshd.log ]] && \
+    touch /config/log/nginx/sshd.log
 
 # permissions
 chown -R abc:abc \

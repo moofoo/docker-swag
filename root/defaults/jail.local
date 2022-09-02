@@ -8,13 +8,16 @@
 # Prevents banning LAN subnets
 ignoreip = 10.0.0.0/8
            192.168.0.0/16
+           192.168.1.0/24
            172.16.0.0/12
+           127.0.0.1/8
+           ::1
 
 # Changes the default ban action from "iptables-multiport", which causes issues on some platforms, to "iptables-allports".
 banaction = iptables-allports
 
 # "bantime" is the number of seconds that a host is banned.
-bantime  = 600
+bantime  = 1d
 
 # A host is banned if it has generated "maxretry" during the last "findtime"
 # seconds.
@@ -23,9 +26,25 @@ findtime  = 600
 # "maxretry" is the number of failures before a host get banned.
 maxretry = 5
 
+# [ssh]
+# enabled = false
 
-[ssh]
-enabled = false
+
+[sshd]
+# To use more aggressive sshd modes set filter parameter "mode" in jail.local:
+# normal (default), ddos, extra or aggressive (combines all).
+# See "tests/files/logs/sshd" or "filter.d/sshd.conf" for usage example and details.
+#mode   = normal
+enabled = true
+port    = ssh
+logpath  = /config/log/nginx/sshd.log
+
+[ssh-ddos]
+enabled = true
+port    = ssh,sftp
+filter  = sshd-ddos
+logpath  = /config/log/nginx/sshd.log
+maxretry = 2
 
 [nginx-http-auth]
 enabled  = true
@@ -57,3 +76,22 @@ enabled  = true
 port     = http,https
 filter   = nginx-unauthorized
 logpath  = /config/log/nginx/unauthorized.log
+
+[nginx-naxsi]
+enabled = true
+port = http,https
+filter = nginx-naxsi
+logpath = /config/log/nginx/naxsi.log
+maxretry = 10
+
+[nginx-noscript]
+enabled = true
+port = http,https
+filter = nginx-noscript
+logpath = /config/log/nginx/nginx-noscript.log
+
+[nginx-auth]
+enabled = true
+port = http,https
+filter = nginx-auth
+logpath = /config/log/nginx/nginx-auth.log
